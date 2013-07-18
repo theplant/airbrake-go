@@ -34,19 +34,35 @@ type Line struct {
 }
 
 // stack implements Stack, skipping N frames
-func stacktrace(skip int) (lines []Line) {
+func stacktrace(skip int, stop int) (lines []Line) {
+	// for i := skip; ; i++ {
+	// 	pc, file, line, ok := runtime.Caller(i)
+	// 	if !ok {
+	// 		break
+	// 	}
+
+	// 	item := Line{string(function(pc)), string(file), line}
+
+	// 	// ignore panic method
+	// 	if item.Function != "panic" {
+	// 		lines = append(lines, item)
+	// 	}
+	// }
+
 	for i := skip; ; i++ {
+		if i == stop {
+			break
+		}
 		pc, file, line, ok := runtime.Caller(i)
 		if !ok {
 			break
 		}
-
-		item := Line{string(function(pc)), string(file), line}
-
-		// ignore panic method
-		if item.Function != "panic" {
-			lines = append(lines, item)
+		if file[len(file)-1] == 'c' {
+			continue
 		}
+		f := runtime.FuncForPC(pc)
+		item := Line{f.Name(), file, line}
+		lines = append(lines, item)
 	}
 	return
 }
@@ -140,7 +156,7 @@ func Error(e error, request *http.Request) error {
 		params["Pwd"] = pwd
 	}
 
-	params["Backtrace"] = stacktrace(3)
+	params["Backtrace"] = stacktrace(3, 13)
 
 	post(params)
 
@@ -178,7 +194,7 @@ func Notify(e error) error {
 		params["Hostname"] = hostname
 	}
 
-	params["Backtrace"] = stacktrace(3)
+	params["Backtrace"] = stacktrace(3, 13)
 
 	post(params)
 	return nil

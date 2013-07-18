@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const API_KEY = ""
+const API_KEY = "bfceaa4fd231a0a58d76b102fd46fcb0"
 
 func TestError(t *testing.T) {
 	Verbose = true
@@ -44,9 +44,9 @@ func TestNotify(t *testing.T) {
 	Verbose = true
 	ApiKey = API_KEY
 	Endpoint = "https://api.airbrake.io/notifier_api/v2/notices"
-	
+
 	err := Notify(errors.New("Test Error"))
-	
+
 	if err != nil {
 		t.Error(err)
 	}
