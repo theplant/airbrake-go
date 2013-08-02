@@ -156,7 +156,7 @@ func Error(e error, request *http.Request) error {
 		params["Pwd"] = pwd
 	}
 
-	params["Backtrace"] = stacktrace(3, 13)
+	params["Backtrace"] = stacktrace(0, 20)
 
 	post(params)
 
@@ -194,7 +194,7 @@ func Notify(e error) error {
 		params["Hostname"] = hostname
 	}
 
-	params["Backtrace"] = stacktrace(3, 13)
+	params["Backtrace"] = stacktrace(0, 20)
 
 	post(params)
 	return nil
@@ -217,12 +217,12 @@ func CapturePanic(r *http.Request) {
 }
 
 const source = `<?xml version="1.0" encoding="UTF-8"?>
-<notice version="2.0">
+<notice version="2.3">
   <api-key>{{ .ApiKey }}</api-key>
   <notifier>
-    <name>Airbrake Golang</name>
-    <version>0.0.1</version>
-    <url>http://airbrake.io</url>
+    <name>Airbrake Notifier</name>
+    <version>3.1.6</version>
+    <url>http://api.airbrake.io</url>
   </notifier>
   <error>
     <class>{{ html .Class }}</class>
@@ -243,6 +243,6 @@ const source = `<?xml version="1.0" encoding="UTF-8"?>
   <server-environment>
     <project-root>{{ html .Pwd }}</project-root>   
     <environment-name>{{ .Environment }}</environment-name>
-    <hostname>{{ html .Hostname }}</hostname>
+    <app-version>1.0.0</app-version>
   </server-environment>
 </notice>`
