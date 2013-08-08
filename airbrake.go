@@ -138,6 +138,12 @@ func Error(e error, request *http.Request) error {
 		return apiKeyMissing
 	}
 
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("airbrake error")
+		}
+	}()
+
 	params := map[string]interface{}{
 		"Class":       reflect.TypeOf(e).String(),
 		"Error":       e,
