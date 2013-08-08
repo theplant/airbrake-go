@@ -156,7 +156,7 @@ func Error(e error, request *http.Request) error {
 		params["Pwd"] = pwd
 	}
 
-	params["Backtrace"] = stacktrace(0, 20)
+	params["Backtrace"] = stacktrace(3, 12)
 
 	post(params)
 
@@ -194,7 +194,7 @@ func Notify(e error) error {
 		params["Hostname"] = hostname
 	}
 
-	params["Backtrace"] = stacktrace(0, 20)
+	params["Backtrace"] = stacktrace(3, 12)
 
 	post(params)
 	return nil
